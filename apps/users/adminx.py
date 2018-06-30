@@ -13,6 +13,7 @@ class BaseSetting(object):
 class GlobalSetting(object):
     site_title = u'后台管理系统'
     site_footer = u'mx在线'
+    menu_style = 'accordion'
 
 
 class EmailVerifyRecordAdmin(object):
