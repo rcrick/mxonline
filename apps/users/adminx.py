@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import xadmin
 
-from models import EmailVerifyRecord
+from models import EmailVerifyRecord, Banner
 
 
 class EmailVerifyRecordAdmin(object):
@@ -13,5 +13,16 @@ class EmailVerifyRecordAdmin(object):
     list_filter = ['code', 'email', 'type', 'send_time']
 
 
+class BannerAdmin(object):
+    # 自定义xadmin端需要显示打列
+    list_display = ['title', 'image', 'url', 'index', 'add_time']
+    # 自定义搜索字段
+    search_fields = ['title', 'image', 'url', 'index']
+    # 自定义筛选字段
+    list_filter = ['title', 'image', 'url', 'index', 'add_time']
+
+
 # 注册邮件验证码
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
+# 注册轮播图
+xadmin.site.register(Banner, BannerAdmin)
