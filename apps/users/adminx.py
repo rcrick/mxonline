@@ -10,6 +10,11 @@ class BaseSetting(object):
     use_bootswatch = True
 
 
+class GlobalSetting(object):
+    site_title = u'后台管理系统'
+    site_footer = u'mx在线'
+
+
 class EmailVerifyRecordAdmin(object):
     # 自定义xadmin端需要显示打列
     list_display = ['code', 'email', 'type', 'send_time']
@@ -32,5 +37,7 @@ class BannerAdmin(object):
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 # 注册轮播图
 xadmin.site.register(Banner, BannerAdmin)
-# xadmin全局配置
+# xadmin配置
 xadmin.site.register(views.BaseAdminView, BaseSetting)
+# xadmin全局配置
+xadmin.site.register(views.CommAdminView, GlobalSetting)
