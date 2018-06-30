@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import xadmin
+from xadmin import views
 
 from models import EmailVerifyRecord, Banner
+
+
+class BaseSetting(object):
+    enable_themes = True
+    use_bootswatch = True
 
 
 class EmailVerifyRecordAdmin(object):
@@ -26,3 +32,5 @@ class BannerAdmin(object):
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 # 注册轮播图
 xadmin.site.register(Banner, BannerAdmin)
+# xadmin全局配置
+xadmin.site.register(views.BaseAdminView, BaseSetting)
