@@ -8,7 +8,7 @@ from django.views.generic.base import View
 
 from models import UserProfile
 from forms import LoginForm, RegisterForm
-
+from utils.email_send import send_register_email
 
 class CustomBackend(ModelBackend):
     def authenticate(self, username=None, password=None, **kwargs):
@@ -28,13 +28,19 @@ class RegisterView(View):
     def post(self, request):
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
-            user_name = request.POST.get('username', '')
+            user_name = request.POST.get('email', '')
             pass_word = request.POST.get('password', '')
             user_profile = UserProfile()
             user_profile.username = user_name
             user_profile.email = user_name
+            user_profile.is_active = False
             user_profile.password = make_password(pass_word)
             user_profile.save()
+            send_register_email(user_name, "register")
+            return render(request, 'login.html')
+        else:
+            return render(request, 'register.html', {'register_form': register_form})
+
 
 
 
