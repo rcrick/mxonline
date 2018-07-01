@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import  make_password
 from django.db.models import Q
 from django.views.generic.base import View
 
-from models import UserProfile
+from models import UserProfile, EmailVerifyRecord
 from forms import LoginForm, RegisterForm
 from utils.email_send import send_register_email
 
@@ -19,6 +19,17 @@ class CustomBackend(ModelBackend):
         except Exception as e:
             return None
 
+
+class ActiveUserView(View):
+    def get(self, request, active_code):
+        all_record = EmailVerifyRecord.objects.filter(code=active_code)
+        if all_record:
+            for record in all_record:
+                email = record.email
+                user = UserProfile.objects.get(email=email)
+                user.is_active = True
+                user.save()
+        return render(request, 'login.html')
 
 class RegisterView(View):
     def get(self, request):
@@ -55,9 +66,12 @@ class LoginView(View):
             pass_word = request.POST.get('password', '')
             user = authenticate(username=user_name, password=pass_word)
             if user is not None:
-                login(request, user)
-                return render(request, "index.html")
+                if user.is_active:
+                    login(request, user)
+                    return render(request, "index.html")
+                else:
+                    return render(request, "login.html", {"message": "用户未激活！"})
             else:
-                return render(request, "login.html", {"msg": "用户名或密码错误！"})
+                return render(request, "login.html", {"message": "用户名或密码错误！"})
         else:
             return render(request, "login.html", {"login_form": login_form})
