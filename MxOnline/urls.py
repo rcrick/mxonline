@@ -19,7 +19,7 @@ from django.conf.urls import url, include
 from django.views.generic import TemplateView
 import xadmin
 
-from users.views import LoginView, RegisterView, ActiveUserView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPasswdView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),
     # ?P 代表提取一个变量作为参数
     # .* 代表把active_code 匹配的全部拿过来当参数
-    url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active')
+    url(r'^active/(?P<active_code>.*)/$', ActiveUserView.as_view(), name='user_active'),
+    url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name='reset_passwd'),
+    url(r'^forget/', ForgetPwdView.as_view(), name='forget_passwd'),
+    url(r'^modifypass/', ModifyPasswdView.as_view(), name='modify_pass')
 ]
